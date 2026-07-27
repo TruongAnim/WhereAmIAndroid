@@ -1,0 +1,25 @@
+package com.anim.where.am.i.presentation.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+
+object Routes {
+    const val MAIN = "main"
+    const val SETTINGS = "settings"
+    const val STATUS = "status"
+    const val QR_SCAN = "qr_scan"
+    const val QR_SHARE = "qr_share"
+}
+
+@Composable
+fun WhereAmINavHost(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = Routes.MAIN) {
+        composable(Routes.MAIN) { /* MainScreen added in Task 14 */ }
+        composable(Routes.SETTINGS) { /* Task 15 */ }
+        composable(Routes.STATUS) { /* Task 16 */ }
+        composable(Routes.QR_SCAN) { /* Task 17 */ }
+        composable(Routes.QR_SHARE) { /* Task 17 */ }
+    }
+}
