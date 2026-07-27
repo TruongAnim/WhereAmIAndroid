@@ -5,6 +5,7 @@ import com.anim.where.am.i.R
 import com.anim.where.am.i.data.log.LogRepositoryImpl
 import com.anim.where.am.i.data.tracker.TrackerRepositoryImpl
 import com.anim.where.am.i.data.tracker.toConfig
+import com.anim.where.am.i.domain.model.TrackingSettings
 import com.anim.where.am.i.domain.repository.LogRepository
 import com.anim.where.am.i.domain.repository.SettingsRepository
 import com.anim.where.am.i.domain.repository.TrackerRepository
@@ -23,33 +24,35 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object TrackerModule {
 
+    // Single shared bootstrap snapshot: read the persisted (or freshly-seeded) settings once
+    // and persist them once, so every consumer (tracker + log repositories) derives the same
+    // deviceId regardless of which one resolves first.
+    @Provides @Singleton
+    fun bootstrapSettings(settingsRepository: SettingsRepository): TrackingSettings {
+        val settings = runBlocking { settingsRepository.observeSettings().first() }
+        runBlocking { settingsRepository.save(settings) } // persist seeded random deviceId once
+        return settings
+    }
+
     @Provides @Singleton
     fun trackerRepository(
         @ApplicationContext context: Context,
         @IoDispatcher io: CoroutineDispatcher,
-        settingsRepository: SettingsRepository,
-    ): TrackerRepository {
-        val bootstrap = runBlocking { settingsRepository.observeSettings().first() }
-        // Persist once so the seeded random deviceId is stored.
-        runBlocking { settingsRepository.save(bootstrap) }
-        return TrackerRepositoryImpl(
-            context = context,
-            io = io,
-            notificationText = context.getString(R.string.notification_text),
-            bootstrapSettings = bootstrap,
-        )
-    }
+        bootstrapSettings: TrackingSettings,
+    ): TrackerRepository = TrackerRepositoryImpl(
+        context = context,
+        io = io,
+        notificationText = context.getString(R.string.notification_text),
+        bootstrapSettings = bootstrapSettings,
+    )
 
     @Provides @Singleton
     fun logRepository(
         @ApplicationContext context: Context,
-        settingsRepository: SettingsRepository,
+        bootstrapSettings: TrackingSettings,
     ): LogRepository = LogRepositoryImpl(
         trackerProvider = {
-            sharedTracker() ?: run {
-                val s = settingsRepository.observeSettings().first()
-                sharedTracker(s.toConfig(context.getString(R.string.notification_text)))
-            }
+            sharedTracker() ?: sharedTracker(bootstrapSettings.toConfig(context.getString(R.string.notification_text)))
         },
     )
 }
