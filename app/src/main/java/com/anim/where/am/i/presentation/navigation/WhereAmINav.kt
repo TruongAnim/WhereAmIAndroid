@@ -22,7 +22,13 @@ fun WhereAmINavHost(navController: NavHostController) {
                 onOpenStatus = { navController.navigate(Routes.STATUS) },
             )
         }
-        composable(Routes.SETTINGS) { /* Task 15 */ }
+        composable(Routes.SETTINGS) {
+            com.anim.where.am.i.presentation.settings.SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onScanQr = { navController.navigate(Routes.QR_SCAN) },
+                onShareConfig = { navController.navigate(Routes.QR_SHARE) },
+            )
+        }
         composable(Routes.STATUS) { /* Task 16 */ }
         composable(Routes.QR_SCAN) { /* Task 17 */ }
         composable(Routes.QR_SHARE) { /* Task 17 */ }
