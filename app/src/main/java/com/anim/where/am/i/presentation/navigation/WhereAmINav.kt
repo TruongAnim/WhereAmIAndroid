@@ -29,7 +29,7 @@ fun WhereAmINavHost(navController: NavHostController) {
                 onShareConfig = { navController.navigate(Routes.QR_SHARE) },
             )
         }
-        composable(Routes.STATUS) { /* Task 16 */ }
+        composable(Routes.STATUS) { com.anim.where.am.i.presentation.status.StatusScreen() }
         composable(Routes.QR_SCAN) { /* Task 17 */ }
         composable(Routes.QR_SHARE) { /* Task 17 */ }
     }
