@@ -19,11 +19,25 @@ class ConfigLinkParserTest {
         assertEquals(ParsedLink.Action(TrackerAction.SOS), parser.parse("whereami://action/sos"))
     }
 
+    @Test fun parsesStopAction() {
+        assertEquals(ParsedLink.Action(TrackerAction.STOP), parser.parse("whereami://action/stop"))
+    }
+
     @Test fun parsesHttpUrlAsServer() {
         val r = parser.parse("https://server.example.com:8082/path?id=99&accuracy=high") as ParsedLink.Config
         assertEquals("https://server.example.com:8082/path", r.link.serverUrl)
         assertEquals("99", r.link.deviceId)
         assertEquals(Accuracy.HIGH, r.link.accuracy)
+    }
+
+    @Test fun parsesHttpUrlWithUnparseableHostAsServer() {
+        val r = parser.parse("http://my_host.example.com/path") as ParsedLink.Config
+        assertEquals("http://my_host.example.com/path", r.link.serverUrl)
+    }
+
+    @Test fun parsesHttpUrlWithNoPortAndNoPath() {
+        val r = parser.parse("https://example.com") as ParsedLink.Config
+        assertEquals("https://example.com", r.link.serverUrl)
     }
 
     @Test fun parsesConfigSchemeWithParams() {

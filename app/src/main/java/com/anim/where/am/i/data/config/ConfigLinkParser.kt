@@ -12,7 +12,7 @@ class ConfigLinkParser {
         val uri = try { URI(raw.trim()) } catch (_: Exception) { return null }
         val scheme = uri.scheme?.lowercase() ?: return null
 
-        if (scheme == "whereami" && uri.host == "action") {
+        if (scheme == "whereami" && uri.host?.lowercase() == "action") {
             val action = when (uri.path.trim('/').lowercase()) {
                 "start" -> TrackerAction.START
                 "stop" -> TrackerAction.STOP
@@ -25,8 +25,7 @@ class ConfigLinkParser {
         val params = parseQuery(uri.rawQuery)
         val serverUrl = when (scheme) {
             "http", "https" -> buildString {
-                append(scheme).append("://").append(uri.host)
-                if (uri.port != -1) append(":").append(uri.port)
+                append(scheme).append("://").append(uri.authority ?: uri.host ?: "")
                 if (!uri.path.isNullOrEmpty()) append(uri.path)
             }
             else -> params["url"]
