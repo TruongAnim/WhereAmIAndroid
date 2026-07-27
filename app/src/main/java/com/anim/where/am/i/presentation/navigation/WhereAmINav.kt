@@ -16,7 +16,12 @@ object Routes {
 @Composable
 fun WhereAmINavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Routes.MAIN) {
-        composable(Routes.MAIN) { /* MainScreen added in Task 14 */ }
+        composable(Routes.MAIN) {
+            com.anim.where.am.i.presentation.main.MainScreen(
+                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                onOpenStatus = { navController.navigate(Routes.STATUS) },
+            )
+        }
         composable(Routes.SETTINGS) { /* Task 15 */ }
         composable(Routes.STATUS) { /* Task 16 */ }
         composable(Routes.QR_SCAN) { /* Task 17 */ }
