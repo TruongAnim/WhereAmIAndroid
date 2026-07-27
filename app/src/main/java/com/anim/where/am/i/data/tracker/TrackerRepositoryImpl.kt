@@ -40,7 +40,7 @@ class TrackerRepositoryImpl(
 
     override fun observeStatus(): Flow<TrackingStatus> =
         trackerFlow.flatMapLatest { t ->
-            if (t == null) flow { emitAll(ensureThenState()) } else t.state.map { it.toStatus() }
+            if (t == null) ensureThenState() else t.state.map { it.toStatus() }
         }
 
     private fun ensureThenState(): Flow<TrackingStatus> = flow {
@@ -60,7 +60,10 @@ class TrackerRepositoryImpl(
         tracker().requestPosition(context, alarm)
 
     override suspend fun updateConfig(settings: TrackingSettings) = mutex.withLock {
-        val current = trackerFlow.value ?: sharedTracker(settings.toConfig(notificationText))
-        trackerFlow.value = current.updateConfig(settings.toConfig(notificationText))
+        val config = settings.toConfig(notificationText)
+        withContext(io) {
+            val current = trackerFlow.value ?: sharedTracker(config)
+            trackerFlow.value = current.updateConfig(config)
+        }
     }
 }
