@@ -30,7 +30,9 @@ fun WhereAmINavHost(navController: NavHostController) {
             )
         }
         composable(Routes.STATUS) { com.anim.where.am.i.presentation.status.StatusScreen() }
-        composable(Routes.QR_SCAN) { /* Task 17 */ }
-        composable(Routes.QR_SHARE) { /* Task 17 */ }
+        composable(Routes.QR_SCAN) {
+            com.anim.where.am.i.presentation.qr.QrScanScreen(onDone = { navController.popBackStack() })
+        }
+        composable(Routes.QR_SHARE) { com.anim.where.am.i.presentation.qr.QrShareScreen() }
     }
 }
