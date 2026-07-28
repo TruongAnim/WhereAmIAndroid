@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - App package / namespace: `com.anim.where.am.i` (verbatim).
-- Kotlin version MUST be `2.3.21` (SDK core metadata requires it); AGP stays `9.2.1`; Gradle wrapper `9.4.1`.
+- Kotlin version MUST be `2.3.21` (SDK core metadata requires it); AGP `9.2.0` (aligned with SDK for composite build; was 9.2.1); Gradle wrapper `9.4.1`.
 - compileSdk `37`, minSdk `35`, targetSdk `36` — unchanged.
 - SDK consumed via `includeBuild("../traccar-client-sdk")` + `implementation("org.traccar:traccar-client-sdk")`. Never copy SDK source.
 - Domain layer MUST NOT reference any `org.traccar.client.*` type. Mapping happens only in `data/`.
