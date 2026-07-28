@@ -38,6 +38,10 @@
                 <data android:scheme="whereami" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".quickactions.ShortcutActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>
