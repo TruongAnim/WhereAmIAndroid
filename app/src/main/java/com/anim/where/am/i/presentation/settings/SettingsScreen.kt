@@ -41,6 +41,12 @@ fun SettingsScreen(
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val urlError by viewModel.urlError.collectAsStateWithLifecycle()
     var advanced by remember { mutableStateOf(false) }
+
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
+        viewModel.reload()
+        onPauseOrDispose { }
+    }
+
     val s = settings ?: return
 
     Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.settings_title)) }) }) { padding ->
@@ -51,7 +57,9 @@ fun SettingsScreen(
             OutlinedTextField(
                 value = s.serverUrl, onValueChange = { v -> viewModel.update { it.copy(serverUrl = v) } },
                 label = { Text(stringResource(R.string.server_url_label)) },
-                isError = urlError, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                isError = urlError,
+                supportingText = { if (urlError) Text(stringResource(R.string.invalid_url)) },
+                singleLine = true, modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = s.deviceId, onValueChange = { v -> viewModel.update { it.copy(deviceId = v) } },

@@ -22,7 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.anim.where.am.i.R
 import kotlinx.coroutines.delay
@@ -38,8 +41,11 @@ fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val displayFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.US) }
 
+    val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(Unit) {
-        while (true) { delay(5000); viewModel.refresh() }
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            while (true) { delay(5000); viewModel.refresh() }
+        }
     }
 
     Scaffold(

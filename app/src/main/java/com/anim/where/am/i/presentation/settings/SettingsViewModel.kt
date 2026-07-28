@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    observeSettings: ObserveSettings,
+    private val observeSettings: ObserveSettings,
     private val saveSettings: SaveSettings,
 ) : ViewModel() {
 
@@ -26,7 +26,14 @@ class SettingsViewModel @Inject constructor(
     val urlError: StateFlow<Boolean> = _urlError.asStateFlow()
 
     init {
-        viewModelScope.launch { _settings.value = observeSettings().first() }
+        reload()
+    }
+
+    fun reload() {
+        viewModelScope.launch {
+            _settings.value = observeSettings().first()
+            _urlError.value = false
+        }
     }
 
     fun update(transform: (TrackingSettings) -> TrackingSettings) {

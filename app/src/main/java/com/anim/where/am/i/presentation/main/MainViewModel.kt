@@ -2,6 +2,7 @@ package com.anim.where.am.i.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.anim.where.am.i.R
 import com.anim.where.am.i.domain.usecase.ObserveSettings
 import com.anim.where.am.i.domain.usecase.ObserveTrackingStatus
 import com.anim.where.am.i.domain.usecase.RequestSos
@@ -18,7 +19,7 @@ import javax.inject.Inject
 data class MainUiState(
     val deviceId: String = "",
     val tracking: Boolean = false,
-    val message: String? = null,
+    val messageRes: Int? = null,
 )
 
 @HiltViewModel
@@ -47,7 +48,7 @@ class MainViewModel @Inject constructor(
             try {
                 if (enable) startTracking() else stopTracking()
             } catch (e: IllegalStateException) {
-                _uiState.update { it.copy(tracking = false, message = e.message) }
+                _uiState.update { it.copy(tracking = false, messageRes = R.string.permission_denied) }
             }
         }
     }
@@ -55,10 +56,10 @@ class MainViewModel @Inject constructor(
     fun onRequestPosition() {
         viewModelScope.launch {
             try { requestSos() } catch (e: IllegalStateException) {
-                _uiState.update { it.copy(message = e.message) }
+                _uiState.update { it.copy(messageRes = R.string.permission_denied) }
             }
         }
     }
 
-    fun consumeMessage() = _uiState.update { it.copy(message = null) }
+    fun consumeMessage() = _uiState.update { it.copy(messageRes = null) }
 }

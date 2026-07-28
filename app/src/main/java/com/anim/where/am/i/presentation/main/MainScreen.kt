@@ -39,10 +39,11 @@ fun MainScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = androidx.compose.ui.platform.LocalContext.current
 
-    LaunchedEffect(state.message) {
-        state.message?.let {
-            snackbarHostState.showSnackbar(it)
+    LaunchedEffect(state.messageRes) {
+        state.messageRes?.let {
+            snackbarHostState.showSnackbar(context.getString(it))
             viewModel.consumeMessage()
         }
     }
