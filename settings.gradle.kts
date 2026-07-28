@@ -22,5 +22,11 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("../traccar-client-sdk") {
+    dependencySubstitution {
+        substitute(module("org.traccar:traccar-client-sdk")).using(project(":core"))
+    }
+}
+
 rootProject.name = "WhereAmI"
 include(":app")
