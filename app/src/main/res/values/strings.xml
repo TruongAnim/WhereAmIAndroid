@@ -74,4 +74,23 @@
     <string name="scan_qr_hint">Point the camera at a configuration QR code</string>
     <string name="share_config_detail">Scan this on another device to copy the current configuration.</string>
     <string name="share_config_warning">This code contains your server address and its access token. Share it only with people you trust.</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_history">History</string>
+    <string name="tab_logs">Log</string>
+    <string name="tab_settings">Settings</string>
+    <string name="stat_session">Session</string>
+    <string name="stat_uploads_today">Sent today</string>
+    <string name="stat_uploads">Sent</string>
+    <string name="stat_fixes">Fixes</string>
+    <string name="stat_errors">Errors</string>
+    <string name="history_title">History</string>
+    <string name="history_footnote">Built from the tracker log, which keeps only recent activity. The full history lives on the server.</string>
+    <string name="history_empty_title">Nothing recorded yet</string>
+    <string name="history_empty_detail">Turn tracking on and your days will be summarised here.</string>
+    <string name="map_promo_title">See it on a map</string>
+    <string name="map_promo_detail">Every recorded position, drawn as a route you can walk through day by day.</string>
+    <string name="map_promo_action">Open map</string>
+    <string name="day_today">Today</string>
+    <string name="day_yesterday">Yesterday</string>
+    <string name="settings_saved">Settings saved</string>
 </resources>

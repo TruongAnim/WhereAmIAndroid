@@ -74,4 +74,23 @@
     <string name="scan_qr_hint">Hướng camera vào mã QR cấu hình</string>
     <string name="share_config_detail">Quét mã này trên máy khác để sao chép cấu hình hiện tại.</string>
     <string name="share_config_warning">Mã này chứa địa chỉ máy chủ và token truy cập. Chỉ chia sẻ với người bạn tin tưởng.</string>
+    <string name="tab_home">Trang chủ</string>
+    <string name="tab_history">Lịch sử</string>
+    <string name="tab_logs">Nhật ký</string>
+    <string name="tab_settings">Cài đặt</string>
+    <string name="stat_session">Phiên</string>
+    <string name="stat_uploads_today">Gửi hôm nay</string>
+    <string name="stat_uploads">Đã gửi</string>
+    <string name="stat_fixes">Điểm</string>
+    <string name="stat_errors">Lỗi</string>
+    <string name="history_title">Lịch sử</string>
+    <string name="history_footnote">Tổng hợp từ nhật ký của bộ theo dõi, vốn chỉ giữ hoạt động gần đây. Lịch sử đầy đủ nằm trên máy chủ.</string>
+    <string name="history_empty_title">Chưa ghi nhận gì</string>
+    <string name="history_empty_detail">Bật theo dõi rồi mỗi ngày sẽ được tổng hợp ở đây.</string>
+    <string name="map_promo_title">Xem trên bản đồ</string>
+    <string name="map_promo_detail">Toàn bộ vị trí đã ghi, vẽ thành lộ trình xem được theo từng ngày.</string>
+    <string name="map_promo_action">Mở bản đồ</string>
+    <string name="day_today">Hôm nay</string>
+    <string name="day_yesterday">Hôm qua</string>
+    <string name="settings_saved">Đã lưu cài đặt</string>
 </resources>

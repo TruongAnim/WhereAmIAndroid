@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Refresh
@@ -47,6 +46,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.anim.where.am.i.R
+import com.anim.where.am.i.ui.components.TabWindowInsets
 import com.anim.where.am.i.domain.model.LogItem
 import com.anim.where.am.i.ui.theme.LocalStatusPalette
 import kotlinx.coroutines.delay
@@ -77,10 +77,7 @@ private fun classify(message: String): LogKind {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatusScreen(
-    onBack: () -> Unit,
-    viewModel: StatusViewModel = hiltViewModel(),
-) {
+fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
     val logs by viewModel.logs.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val displayFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.US) }
@@ -96,17 +93,10 @@ fun StatusScreen(
     }
 
     Scaffold(
+        contentWindowInsets = TabWindowInsets,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.status_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            stringResource(R.string.back),
-                        )
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                 ),

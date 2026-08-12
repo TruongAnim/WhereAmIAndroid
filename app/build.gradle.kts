@@ -19,6 +19,11 @@ val defaultServerUrl: String =
     localProperties.getProperty("whereami.serverUrl")?.trim().takeUnless { it.isNullOrEmpty() }
         ?: "https://demo.traccar.org"
 
+// The web map viewer. Not a secret, so it has a working default.
+val viewerUrl: String =
+    localProperties.getProperty("whereami.viewerUrl")?.trim().takeUnless { it.isNullOrEmpty() }
+        ?: "https://whereami-1c55e.web.app"
+
 android {
     namespace = "com.anim.where.am.i"
     compileSdk {
@@ -38,6 +43,11 @@ android {
             "String",
             "DEFAULT_SERVER_URL",
             "\"" + defaultServerUrl.replace("\\", "\\\\").replace("\"", "\\\"") + "\"",
+        )
+        buildConfigField(
+            "String",
+            "VIEWER_URL",
+            "\"" + viewerUrl.replace("\\", "\\\\").replace("\"", "\\\"") + "\"",
         )
     }
 
