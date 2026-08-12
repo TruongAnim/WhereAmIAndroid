@@ -65,13 +65,25 @@ import java.util.Locale
  */
 private enum class LogKind { ERROR, SUCCESS, MOTION, INFO }
 
+private val HTTP_RESPONSE = Regex("""response (\d{3})""")
+
 private fun classify(message: String): LogKind {
     val text = message.lowercase(Locale.US)
+
+    // The status code decides, not the wording. Matching on "response 2" alone
+    // left every rejection - a 403 from a stale token most of all - looking
+    // like ordinary information, so the line explaining a failure was the one
+    // line that did not read as one.
+    HTTP_RESPONSE.find(text)?.let { match ->
+        val status = match.groupValues[1].toIntOrNull() ?: return@let
+        return if (status in 200..299) LogKind.SUCCESS else LogKind.ERROR
+    }
+
     return when {
         "denied" in text || "error" in text || "failed" in text ||
             "missing" in text || "blocked" in text || "not allowed" in text -> LogKind.ERROR
 
-        "response 2" in text || "accepted" in text || "restored" in text -> LogKind.SUCCESS
+        "accepted" in text || "restored" in text -> LogKind.SUCCESS
         "stationary" in text || "geofence" in text || "stop detection" in text ||
             "activity" in text || "heartbeat" in text -> LogKind.MOTION
 
