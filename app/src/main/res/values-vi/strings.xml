@@ -59,7 +59,7 @@
     <string name="section_destination">Đích đến</string>
     <string name="section_location">Vị trí</string>
     <string name="server_url_hint">Nơi vị trí được gửi tới.</string>
-    <string name="distance_hint">Báo sau khi đi được quãng này. 0 là tắt.</string>
+    <string name="distance_hint">Báo sau khi đi được quãng này. 0 là bỏ qua tiêu chí khoảng cách.</string>
     <string name="interval_hint">Báo ít nhất mỗi khoảng này. 0 là tắt.</string>
     <string name="stop_detection_hint">Tắt GPS khi đứng yên. Tiết kiệm pin đáng kể.</string>
     <string name="show_advanced_label">Hiện cài đặt nâng cao</string>
@@ -93,4 +93,8 @@
     <string name="day_today">Hôm nay</string>
     <string name="day_yesterday">Hôm qua</string>
     <string name="settings_saved">Đã lưu cài đặt</string>
+    <string name="log_mode_main">Log chính</string>
+    <string name="log_mode_detail">Log chi tiết</string>
+    <string name="log_mode_detail_hint">Đang hiện cả lý do sự kiện bị bỏ qua</string>
+    <string name="log_mode_main_hint">Đang ẩn %1$d dòng chi tiết</string>
 </resources>

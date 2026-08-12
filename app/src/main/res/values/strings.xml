@@ -59,7 +59,7 @@
     <string name="section_destination">Destination</string>
     <string name="section_location">Location</string>
     <string name="server_url_hint">Where positions are uploaded.</string>
-    <string name="distance_hint">Report after moving this far. 0 disables.</string>
+    <string name="distance_hint">Report after moving this far. 0 ignores distance.</string>
     <string name="interval_hint">Report at least this often. 0 disables.</string>
     <string name="stop_detection_hint">Turn GPS off while standing still. Saves a lot of battery.</string>
     <string name="show_advanced_label">Show advanced settings</string>
@@ -93,4 +93,8 @@
     <string name="day_today">Today</string>
     <string name="day_yesterday">Yesterday</string>
     <string name="settings_saved">Settings saved</string>
+    <string name="log_mode_main">Main log</string>
+    <string name="log_mode_detail">Detailed log</string>
+    <string name="log_mode_detail_hint">Showing why events were skipped</string>
+    <string name="log_mode_main_hint">%1$d detail entries hidden</string>
 </resources>

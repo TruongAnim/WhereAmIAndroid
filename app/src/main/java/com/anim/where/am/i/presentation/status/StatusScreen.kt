@@ -2,6 +2,7 @@ package com.anim.where.am.i.presentation.status
 
 import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,9 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Troubleshoot
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,6 +52,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.anim.where.am.i.R
 import com.anim.where.am.i.ui.components.TabWindowInsets
 import com.anim.where.am.i.domain.model.LogItem
+import com.anim.where.am.i.domain.model.LogLevel
 import com.anim.where.am.i.ui.theme.LocalStatusPalette
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -79,6 +84,8 @@ private fun classify(message: String): LogKind {
 @Composable
 fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
     val logs by viewModel.logs.collectAsStateWithLifecycle()
+    val detailMode by viewModel.detailMode.collectAsStateWithLifecycle()
+    val detailCount by viewModel.detailCount.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val displayFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.US) }
 
@@ -123,13 +130,51 @@ fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
             )
         },
     ) { padding ->
-        if (logs.isEmpty()) {
-            EmptyLogs(Modifier.padding(padding))
-        } else {
-            LazyColumn(
+        Column(Modifier.padding(padding).fillMaxSize()) {
+            Row(
                 Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                FilterChip(
+                    selected = detailMode,
+                    onClick = { viewModel.setDetailMode(!detailMode) },
+                    label = {
+                        Text(
+                            if (detailMode) {
+                                stringResource(R.string.log_mode_detail)
+                            } else {
+                                stringResource(R.string.log_mode_main)
+                            },
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Troubleshoot,
+                            contentDescription = null,
+                            Modifier.size(FilterChipDefaults.IconSize),
+                        )
+                    },
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    if (detailMode) {
+                        stringResource(R.string.log_mode_detail_hint)
+                    } else {
+                        stringResource(R.string.log_mode_main_hint, detailCount)
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            if (logs.isEmpty()) {
+                EmptyLogs()
+                return@Column
+            }
+            LazyColumn(
+                Modifier.fillMaxSize(),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(
                     horizontal = 16.dp,
                     vertical = 8.dp,
@@ -154,10 +199,12 @@ private fun LogRow(entry: LogItem, time: String) {
         LogKind.INFO -> MaterialTheme.colorScheme.outline
     }
 
+    val isDetail = entry.level == LogLevel.DETAIL
+
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = if (isDetail) 5.dp else 8.dp),
         verticalAlignment = Alignment.Top,
     ) {
         // A timeline rail: the dot carries the severity, the line ties the
@@ -167,11 +214,19 @@ private fun LogRow(entry: LogItem, time: String) {
             modifier = Modifier.width(20.dp),
         ) {
             Spacer(Modifier.height(5.dp))
-            Box(
-                Modifier
-                    .size(9.dp)
-                    .background(accent, CircleShape),
-            )
+            if (isDetail) {
+                Box(
+                    Modifier
+                        .size(7.dp)
+                        .border(1.5.dp, accent.copy(alpha = 0.7f), CircleShape),
+                )
+            } else {
+                Box(
+                    Modifier
+                        .size(9.dp)
+                        .background(accent, CircleShape),
+                )
+            }
             Box(
                 Modifier
                     .width(1.dp)
@@ -181,7 +236,15 @@ private fun LogRow(entry: LogItem, time: String) {
         }
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
-            Text(entry.message, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                entry.message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (isDetail) {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            )
             Text(
                 time,
                 style = MaterialTheme.typography.labelMedium,
