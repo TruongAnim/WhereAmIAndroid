@@ -1,9 +1,23 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
+
+// The ingest URL carries a shared secret, so it lives in local.properties
+// (git-ignored) rather than in source control. Without it the app falls back
+// to the public Traccar demo server.
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
+val defaultServerUrl: String =
+    localProperties.getProperty("whereami.serverUrl")?.trim().takeUnless { it.isNullOrEmpty() }
+        ?: "https://demo.traccar.org"
 
 android {
     namespace = "com.anim.where.am.i"
@@ -19,6 +33,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "DEFAULT_SERVER_URL",
+            "\"" + defaultServerUrl.replace("\\", "\\\\").replace("\"", "\\\"") + "\"",
+        )
     }
 
     buildTypes {
@@ -34,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

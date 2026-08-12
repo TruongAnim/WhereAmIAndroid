@@ -1,20 +1,41 @@
 package com.anim.where.am.i.presentation.settings
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,9 +47,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anim.where.am.i.R
 import com.anim.where.am.i.domain.model.Accuracy
+import com.anim.where.am.i.ui.components.RowDivider
+import com.anim.where.am.i.ui.components.SectionCard
+import com.anim.where.am.i.ui.components.SwitchRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,89 +67,244 @@ fun SettingsScreen(
     val urlError by viewModel.urlError.collectAsStateWithLifecycle()
     var advanced by remember { mutableStateOf(false) }
 
-    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
+    LifecycleResumeEffect(Unit) {
         viewModel.reload()
         onPauseOrDispose { }
     }
 
     val s = settings ?: return
 
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(R.string.settings_title)) }) }) { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            stringResource(R.string.back),
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
+            )
+        },
+        bottomBar = {
+            Surface(color = MaterialTheme.colorScheme.background) {
+                Button(
+                    onClick = { viewModel.save(onBack) },
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(52.dp),
+                ) {
+                    Text(
+                        stringResource(R.string.save_button),
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
+            }
+        },
+    ) { padding ->
         Column(
-            Modifier.padding(padding).padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            OutlinedTextField(
-                value = s.serverUrl, onValueChange = { v -> viewModel.update { it.copy(serverUrl = v) } },
-                label = { Text(stringResource(R.string.server_url_label)) },
-                isError = urlError,
-                supportingText = { if (urlError) Text(stringResource(R.string.invalid_url)) },
-                singleLine = true, modifier = Modifier.fillMaxWidth(),
-            )
-            OutlinedTextField(
-                value = s.deviceId, onValueChange = { v -> viewModel.update { it.copy(deviceId = v) } },
-                label = { Text(stringResource(R.string.id_label)) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
-            )
-            AccuracyDropdown(s.accuracy) { a -> viewModel.update { it.copy(accuracy = a) } }
-            IntField(R.string.distance_label, s.distanceMeters) { v -> viewModel.update { it.copy(distanceMeters = v) } }
-            IntField(R.string.interval_label, s.intervalSeconds) { v -> viewModel.update { it.copy(intervalSeconds = v) } }
-
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.advanced_label), Modifier.weight(1f))
-                Switch(checked = advanced, onCheckedChange = { advanced = it })
+            SectionCard(
+                title = stringResource(R.string.section_destination),
+                icon = Icons.Default.Cloud,
+            ) {
+                OutlinedTextField(
+                    value = s.serverUrl,
+                    onValueChange = { v -> viewModel.update { it.copy(serverUrl = v) } },
+                    label = { Text(stringResource(R.string.server_url_label)) },
+                    isError = urlError,
+                    supportingText = {
+                        Text(
+                            if (urlError) stringResource(R.string.invalid_url)
+                            else stringResource(R.string.server_url_hint),
+                        )
+                    },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.small,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+                OutlinedTextField(
+                    value = s.deviceId,
+                    onValueChange = { v -> viewModel.update { it.copy(deviceId = v) } },
+                    label = { Text(stringResource(R.string.id_label)) },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.small,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    FilledTonalButton(
+                        onClick = onScanQr,
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(Icons.Default.QrCodeScanner, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.scan_qr))
+                    }
+                    FilledTonalButton(
+                        onClick = onShareConfig,
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(Icons.Default.QrCode, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.share_config))
+                    }
+                }
             }
 
-            if (advanced) {
-                IntField(R.string.angle_label, s.angleDegrees) { v -> viewModel.update { it.copy(angleDegrees = v) } }
-                IntField(R.string.heartbeat_label, s.heartbeatSeconds) { v -> viewModel.update { it.copy(heartbeatSeconds = v) } }
-                BoolRow(R.string.buffer_label, s.buffer) { v -> viewModel.update { it.copy(buffer = v) } }
-                BoolRow(R.string.wakelock_label, s.wakeLock) { v -> viewModel.update { it.copy(wakeLock = v) } }
-                BoolRow(R.string.stop_detection_label, s.stopDetection) { v -> viewModel.update { it.copy(stopDetection = v) } }
-                BoolRow(R.string.prefer_platform_label, s.preferPlatformProviders) { v -> viewModel.update { it.copy(preferPlatformProviders = v) } }
+            SectionCard(
+                title = stringResource(R.string.section_location),
+                icon = Icons.Default.Explore,
+            ) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                    Text(
+                        stringResource(R.string.accuracy_label),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    AccuracySelector(s.accuracy) { a -> viewModel.update { it.copy(accuracy = a) } }
+                }
+                RowDivider()
+                NumberRow(
+                    label = stringResource(R.string.distance_label),
+                    subtitle = stringResource(R.string.distance_hint),
+                    value = s.distanceMeters,
+                ) { v -> viewModel.update { it.copy(distanceMeters = v) } }
+                RowDivider()
+                NumberRow(
+                    label = stringResource(R.string.interval_label),
+                    subtitle = stringResource(R.string.interval_hint),
+                    value = s.intervalSeconds,
+                ) { v -> viewModel.update { it.copy(intervalSeconds = v) } }
+                RowDivider()
+                SwitchRow(
+                    title = stringResource(R.string.stop_detection_label),
+                    subtitle = stringResource(R.string.stop_detection_hint),
+                    checked = s.stopDetection,
+                ) { v -> viewModel.update { it.copy(stopDetection = v) } }
             }
 
-            Button(onClick = onScanQr, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.scan_qr)) }
-            Button(onClick = onShareConfig, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.share_config)) }
-            Button(onClick = { viewModel.save(onBack) }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.save_button)) }
+            SectionCard(
+                title = stringResource(R.string.advanced_label),
+                icon = Icons.Default.Tune,
+            ) {
+                SwitchRow(
+                    title = stringResource(R.string.show_advanced_label),
+                    subtitle = stringResource(R.string.show_advanced_hint),
+                    checked = advanced,
+                    onCheckedChange = { advanced = it },
+                )
+                AnimatedVisibility(visible = advanced) {
+                    Column {
+                        RowDivider()
+                        NumberRow(
+                            label = stringResource(R.string.angle_label),
+                            subtitle = stringResource(R.string.angle_hint),
+                            value = s.angleDegrees,
+                        ) { v -> viewModel.update { it.copy(angleDegrees = v) } }
+                        RowDivider()
+                        NumberRow(
+                            label = stringResource(R.string.heartbeat_label),
+                            subtitle = stringResource(R.string.heartbeat_hint),
+                            value = s.heartbeatSeconds,
+                        ) { v -> viewModel.update { it.copy(heartbeatSeconds = v) } }
+                        RowDivider()
+                        SwitchRow(
+                            title = stringResource(R.string.buffer_label),
+                            subtitle = stringResource(R.string.buffer_hint),
+                            checked = s.buffer,
+                        ) { v -> viewModel.update { it.copy(buffer = v) } }
+                        RowDivider()
+                        SwitchRow(
+                            title = stringResource(R.string.wakelock_label),
+                            subtitle = stringResource(R.string.wakelock_hint),
+                            checked = s.wakeLock,
+                        ) { v -> viewModel.update { it.copy(wakeLock = v) } }
+                        RowDivider()
+                        SwitchRow(
+                            title = stringResource(R.string.prefer_platform_label),
+                            subtitle = stringResource(R.string.prefer_platform_hint),
+                            checked = s.preferPlatformProviders,
+                        ) { v -> viewModel.update { it.copy(preferPlatformProviders = v) } }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(4.dp))
         }
     }
 }
 
 @Composable
-private fun IntField(labelRes: Int, value: Int, onChange: (Int) -> Unit) {
-    OutlinedTextField(
-        value = value.toString(),
-        onValueChange = { it.toIntOrNull()?.let(onChange) ?: if (it.isEmpty()) onChange(0) else Unit },
-        label = { Text(stringResource(labelRes)) },
-        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Number),
-        singleLine = true, modifier = Modifier.fillMaxWidth(),
-    )
-}
-
-@Composable
-private fun BoolRow(labelRes: Int, value: Boolean, onChange: (Boolean) -> Unit) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(stringResource(labelRes), Modifier.weight(1f))
-        Switch(checked = value, onCheckedChange = onChange)
+private fun NumberRow(
+    label: String,
+    subtitle: String,
+    value: Int,
+    onChange: (Int) -> Unit,
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(label, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.width(12.dp))
+        OutlinedTextField(
+            value = value.toString(),
+            onValueChange = { text ->
+                if (text.isEmpty()) onChange(0) else text.toIntOrNull()?.let(onChange)
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.width(104.dp),
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AccuracyDropdown(value: Accuracy, onChange: (Accuracy) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-    androidx.compose.material3.ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
-        OutlinedTextField(
-            value = accuracyLabel(value), onValueChange = {}, readOnly = true,
-            label = { Text(stringResource(R.string.accuracy_label)) },
-            modifier = Modifier.fillMaxWidth().menuAnchor(androidx.compose.material3.ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-        )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            Accuracy.entries.forEach { a ->
-                androidx.compose.material3.DropdownMenuItem(
-                    text = { Text(accuracyLabel(a)) },
-                    onClick = { onChange(a); expanded = false },
-                )
+private fun AccuracySelector(value: Accuracy, onChange: (Accuracy) -> Unit) {
+    val entries = Accuracy.entries
+    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+        entries.forEachIndexed { index, accuracy ->
+            SegmentedButton(
+                selected = accuracy == value,
+                onClick = { onChange(accuracy) },
+                shape = SegmentedButtonDefaults.itemShape(index, entries.size),
+            ) {
+                Text(accuracyLabel(accuracy), style = MaterialTheme.typography.labelMedium)
             }
         }
     }
@@ -137,5 +317,5 @@ private fun accuracyLabel(a: Accuracy): String = stringResource(
         Accuracy.HIGH -> R.string.high_accuracy_label
         Accuracy.MEDIUM -> R.string.medium_accuracy_label
         Accuracy.LOW -> R.string.low_accuracy_label
-    }
+    },
 )

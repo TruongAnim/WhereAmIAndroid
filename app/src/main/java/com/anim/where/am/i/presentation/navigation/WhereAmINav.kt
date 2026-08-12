@@ -29,10 +29,18 @@ fun WhereAmINavHost(navController: NavHostController) {
                 onShareConfig = { navController.navigate(Routes.QR_SHARE) },
             )
         }
-        composable(Routes.STATUS) { com.anim.where.am.i.presentation.status.StatusScreen() }
+        composable(Routes.STATUS) {
+            com.anim.where.am.i.presentation.status.StatusScreen(
+                onBack = { navController.popBackStack() },
+            )
+        }
         composable(Routes.QR_SCAN) {
             com.anim.where.am.i.presentation.qr.QrScanScreen(onDone = { navController.popBackStack() })
         }
-        composable(Routes.QR_SHARE) { com.anim.where.am.i.presentation.qr.QrShareScreen() }
+        composable(Routes.QR_SHARE) {
+            com.anim.where.am.i.presentation.qr.QrShareScreen(
+                onBack = { navController.popBackStack() },
+            )
+        }
     }
 }

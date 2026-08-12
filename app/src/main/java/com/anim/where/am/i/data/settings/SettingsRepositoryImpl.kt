@@ -3,6 +3,7 @@ package com.anim.where.am.i.data.settings
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.anim.where.am.i.BuildConfig
 import com.anim.where.am.i.di.IoDispatcher
 import com.anim.where.am.i.domain.model.TrackingSettings
 import com.anim.where.am.i.domain.repository.SettingsRepository
@@ -13,7 +14,10 @@ import kotlinx.coroutines.withContext
 import kotlin.random.Random
 import javax.inject.Inject
 
-private const val DEFAULT_URL = "https://demo.traccar.org"
+// Supplied by `whereami.serverUrl` in local.properties; falls back to the
+// public Traccar demo server when that is absent. Only applies on a fresh
+// install - once a URL is persisted, DataStore wins.
+private val DEFAULT_URL = BuildConfig.DEFAULT_SERVER_URL
 
 class SettingsRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
