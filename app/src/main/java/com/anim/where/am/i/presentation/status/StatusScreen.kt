@@ -15,12 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Inbox
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.VerticalAlignTop
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Troubleshoot
 import androidx.compose.material3.FilterChip
@@ -37,6 +38,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,16 +48,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.anim.where.am.i.R
 import com.anim.where.am.i.ui.components.TabWindowInsets
 import com.anim.where.am.i.domain.model.LogItem
 import com.anim.where.am.i.domain.model.LogLevel
 import com.anim.where.am.i.ui.theme.LocalStatusPalette
-import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -88,14 +87,16 @@ fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
     val detailCount by viewModel.detailCount.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val displayFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.US) }
+    val scope = rememberCoroutineScope()
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(Unit) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            while (true) {
-                delay(5000)
-                viewModel.refresh()
-            }
+    val listState = rememberLazyListState()
+    // New entries are prepended. LazyColumn anchors on the item you are
+    // looking at, so without this they pile up above the viewport and the
+    // screen looks frozen until you scroll back up. Only follow when already
+    // at the top, so reading older entries is never interrupted.
+    LaunchedEffect(logs.firstOrNull()?.timeMillis) {
+        if (listState.firstVisibleItemIndex <= 2) {
+            listState.animateScrollToItem(0)
         }
     }
 
@@ -108,8 +109,8 @@ fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
                 actions = {
-                    IconButton(onClick = viewModel::refresh) {
-                        Icon(Icons.Default.Refresh, stringResource(R.string.refresh))
+                    IconButton(onClick = { scope.launch { listState.animateScrollToItem(0) } }) {
+                        Icon(Icons.Default.VerticalAlignTop, stringResource(R.string.jump_to_newest))
                     }
                     IconButton(onClick = {
                         val text = viewModel.formatShare()
@@ -174,7 +175,8 @@ fun StatusScreen(viewModel: StatusViewModel = hiltViewModel()) {
                 return@Column
             }
             LazyColumn(
-                Modifier.fillMaxSize(),
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(
                     horizontal = 16.dp,
                     vertical = 8.dp,
