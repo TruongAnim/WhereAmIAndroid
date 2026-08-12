@@ -12,4 +12,6 @@ data class TrackingSettings(
     val wakeLock: Boolean = false,
     val stopDetection: Boolean = true,
     val preferPlatformProviders: Boolean = false,
+    /** Seconds between repeated detail log entries of the same kind. 0 logs every one. */
+    val detailLogSeconds: Int = 5,
 )

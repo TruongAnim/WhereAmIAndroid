@@ -97,4 +97,6 @@
     <string name="log_mode_detail">Detailed log</string>
     <string name="log_mode_detail_hint">Showing why events were skipped</string>
     <string name="log_mode_main_hint">%1$d detail entries hidden</string>
+    <string name="detail_log_label">Detail log every (s)</string>
+    <string name="detail_log_hint">Minimum gap between repeated detail entries of the same kind. 0 records every one.</string>
 </resources>

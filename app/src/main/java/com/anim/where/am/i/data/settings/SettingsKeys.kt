@@ -17,6 +17,7 @@ internal object SettingsKeys {
     val WAKELOCK = booleanPreferencesKey("wakelock")
     val STOP_DETECTION = booleanPreferencesKey("stop_detection")
     val PREFER_PLATFORM = booleanPreferencesKey("prefer_platform_providers")
+    val DETAIL_LOG = intPreferencesKey("detail_log_seconds")
 }
 
 internal fun accuracyToKey(a: Accuracy): String = a.name.lowercase()

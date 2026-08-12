@@ -40,6 +40,7 @@ class SettingsRepositoryImpl @Inject constructor(
             prefs[SettingsKeys.WAKELOCK] = settings.wakeLock
             prefs[SettingsKeys.STOP_DETECTION] = settings.stopDetection
             prefs[SettingsKeys.PREFER_PLATFORM] = settings.preferPlatformProviders
+            prefs[SettingsKeys.DETAIL_LOG] = settings.detailLogSeconds
         }
         Unit
     }
@@ -58,6 +59,7 @@ class SettingsRepositoryImpl @Inject constructor(
             wakeLock = this[SettingsKeys.WAKELOCK] ?: false,
             stopDetection = this[SettingsKeys.STOP_DETECTION] ?: true,
             preferPlatformProviders = this[SettingsKeys.PREFER_PLATFORM] ?: false,
+            detailLogSeconds = this[SettingsKeys.DETAIL_LOG] ?: 5,
         )
     }
 }

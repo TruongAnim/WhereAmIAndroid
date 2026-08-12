@@ -252,6 +252,12 @@ fun SettingsScreen(
                             checked = s.wakeLock,
                         ) { v -> viewModel.update { it.copy(wakeLock = v) } }
                         RowDivider()
+                        NumberRow(
+                            label = stringResource(R.string.detail_log_label),
+                            subtitle = stringResource(R.string.detail_log_hint),
+                            value = s.detailLogSeconds,
+                        ) { v -> viewModel.update { it.copy(detailLogSeconds = v) } }
+                        RowDivider()
                         SwitchRow(
                             title = stringResource(R.string.prefer_platform_label),
                             subtitle = stringResource(R.string.prefer_platform_hint),

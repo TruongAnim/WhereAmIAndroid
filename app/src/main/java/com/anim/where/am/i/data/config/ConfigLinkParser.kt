@@ -44,6 +44,7 @@ class ConfigLinkParser {
                 wakeLock = params["wakelock"]?.let(::boolOrNull),
                 stopDetection = params["stop_detection"]?.let(::boolOrNull),
                 preferPlatformProviders = params["prefer_platform_providers"]?.let(::boolOrNull),
+                detailLogSeconds = params["detail_log"]?.toIntOrNull(),
             ),
         )
     }

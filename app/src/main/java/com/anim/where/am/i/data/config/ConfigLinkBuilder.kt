@@ -18,6 +18,7 @@ class ConfigLinkBuilder {
             "wakelock" to settings.wakeLock.toString(),
             "stop_detection" to settings.stopDetection.toString(),
             "prefer_platform_providers" to settings.preferPlatformProviders.toString(),
+            "detail_log" to settings.detailLogSeconds.toString(),
         )
         val query = params.joinToString("&") { (k, v) -> "$k=${enc(v)}" }
         return "whereami://config?$query"

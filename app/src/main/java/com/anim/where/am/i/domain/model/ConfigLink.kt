@@ -12,6 +12,7 @@ data class ConfigLink(
     val wakeLock: Boolean? = null,
     val stopDetection: Boolean? = null,
     val preferPlatformProviders: Boolean? = null,
+    val detailLogSeconds: Int? = null,
 ) {
     fun applyTo(settings: TrackingSettings): TrackingSettings = settings.copy(
         serverUrl = serverUrl ?: settings.serverUrl,
@@ -25,5 +26,6 @@ data class ConfigLink(
         wakeLock = wakeLock ?: settings.wakeLock,
         stopDetection = stopDetection ?: settings.stopDetection,
         preferPlatformProviders = preferPlatformProviders ?: settings.preferPlatformProviders,
+        detailLogSeconds = detailLogSeconds ?: settings.detailLogSeconds,
     )
 }
