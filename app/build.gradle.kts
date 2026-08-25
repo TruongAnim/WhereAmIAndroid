@@ -22,7 +22,7 @@ val defaultServerUrl: String =
 // The web map viewer. Not a secret, so it has a working default.
 val viewerUrl: String =
     localProperties.getProperty("whereami.viewerUrl")?.trim().takeUnless { it.isNullOrEmpty() }
-        ?: "https://whereami-1c55e.web.app"
+        ?: "https://whereami.earth.io.vn"
 
 android {
     namespace = "com.anim.where.am.i"
