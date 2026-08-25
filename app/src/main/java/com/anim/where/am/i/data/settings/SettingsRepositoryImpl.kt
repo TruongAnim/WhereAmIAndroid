@@ -42,6 +42,7 @@ class SettingsRepositoryImpl @Inject constructor(
             prefs[SettingsKeys.PREFER_PLATFORM] = settings.preferPlatformProviders
             prefs[SettingsKeys.DETAIL_LOG] = settings.detailLogSeconds
             prefs[SettingsKeys.SCREEN_EVENTS] = settings.screenEvents
+            prefs[SettingsKeys.IGNORE_JITTER] = settings.ignoreJitter
         }
         Unit
     }
@@ -62,6 +63,7 @@ class SettingsRepositoryImpl @Inject constructor(
             preferPlatformProviders = this[SettingsKeys.PREFER_PLATFORM] ?: false,
             detailLogSeconds = this[SettingsKeys.DETAIL_LOG] ?: 5,
             screenEvents = this[SettingsKeys.SCREEN_EVENTS] ?: true,
+            ignoreJitter = this[SettingsKeys.IGNORE_JITTER] ?: true,
         )
     }
 }

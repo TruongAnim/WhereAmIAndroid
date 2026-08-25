@@ -28,6 +28,7 @@ fun TrackingSettings.toConfig(notificationText: String): Config = Config(
         angleDegrees = angleDegrees,
         stopDetection = stopDetection,
         heartbeatIntervalSeconds = heartbeatSeconds,
+        ignoreJitter = ignoreJitter,
     ),
     wakeLock = wakeLock,
     buffer = buffer,

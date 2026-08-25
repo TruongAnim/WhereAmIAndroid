@@ -19,6 +19,7 @@ internal object SettingsKeys {
     val PREFER_PLATFORM = booleanPreferencesKey("prefer_platform_providers")
     val DETAIL_LOG = intPreferencesKey("detail_log_seconds")
     val SCREEN_EVENTS = booleanPreferencesKey("screen_events")
+    val IGNORE_JITTER = booleanPreferencesKey("ignore_jitter")
 }
 
 internal fun accuracyToKey(a: Accuracy): String = a.name.lowercase()

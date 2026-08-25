@@ -99,7 +99,14 @@
     <string name="log_mode_main_hint">Đang ẩn %1$d dòng chi tiết</string>
     <string name="detail_log_label">Log chi tiết mỗi (giây)</string>
     <string name="detail_log_hint">Khoảng cách tối thiểu giữa hai dòng chi tiết cùng loại. 0 là ghi hết.</string>
+    <string name="ignore_jitter_label">Bỏ qua nhiễu GPS</string>
     <string name="screen_events_label">Sự kiện bật/tắt màn hình</string>
     <string name="screen_events_hint">Gửi một bản ghi mỗi khi màn hình sáng hoặc tắt.</string>
+    <string name="ignore_jitter_hint">Không tính là đã đi khi bản thân phép đo không đủ chính xác để chứng minh. Giữ cho máy nằm yên khỏi vẽ ra một chuyến đi.</string>
+    <string name="distance_below_accuracy_warning">Nhỏ hơn sai số ~%1$d m của mức chính xác đang chọn. Chỉ riêng nhiễu cũng vượt ngưỡng này và ghi ra quãng đường không có thật.</string>
+    <string name="interval_ignored_warning">Không có tác dụng khi khoảng cách lớn hơn 0. Android không nhận cả hai cùng lúc. Đặt khoảng cách về 0, hoặc dùng độ chính xác Cao nhất.</string>
+    <string name="section_help">Trợ giúp</string>
+    <string name="guide_label">Cơ chế hoạt động</string>
+    <string name="guide_hint">Từng thông số làm gì, kèm các bộ cấu hình pha sẵn. Mở trên GitHub.</string>
     <string name="jump_to_newest">Về mục mới nhất</string>
 </resources>

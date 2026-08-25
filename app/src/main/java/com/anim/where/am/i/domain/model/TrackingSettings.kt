@@ -16,4 +16,6 @@ data class TrackingSettings(
     val detailLogSeconds: Int = 5,
     /** Report a record each time the screen turns on or off. */
     val screenEvents: Boolean = true,
+    /** Refuse to count a step the fix itself is not accurate enough to prove. */
+    val ignoreJitter: Boolean = true,
 )

@@ -24,6 +24,13 @@ val viewerUrl: String =
     localProperties.getProperty("whereami.viewerUrl")?.trim().takeUnless { it.isNullOrEmpty() }
         ?: "https://whereami.earth.io.vn"
 
+// Where the Settings screen sends anyone who wants to know what the numbers
+// actually do. Points at the branch the work lives on, not at the repo root:
+// `main` still holds only the initial commit.
+val guideUrl: String =
+    localProperties.getProperty("whereami.guideUrl")?.trim().takeUnless { it.isNullOrEmpty() }
+        ?: "https://github.com/TruongAnim/WhereAmIAndroid/blob/develop/README.md"
+
 android {
     namespace = "com.anim.where.am.i"
     compileSdk {
@@ -48,6 +55,11 @@ android {
             "String",
             "VIEWER_URL",
             "\"" + viewerUrl.replace("\\", "\\\\").replace("\"", "\\\"") + "\"",
+        )
+        buildConfigField(
+            "String",
+            "GUIDE_URL",
+            "\"" + guideUrl.replace("\\", "\\\\").replace("\"", "\\\"") + "\"",
         )
     }
 
