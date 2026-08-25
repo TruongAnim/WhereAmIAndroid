@@ -60,8 +60,20 @@ Fix nào được Android giao lên thì lọc tiếp. Ở đây các điều ki
 - xoay đủ **Góc** độ (nâng cao)
 
 Ba trường hợp **luôn được ghi**, không qua lọc: fix đầu tiên sau khi bật, fix
-ngay lúc chuyển giữa đang-đi và đứng-yên, và các bản ghi không toạ độ
+ngay lúc chuyển giữa đang-đi và đứng-yên, và các bản ghi không phải là fix
 (heartbeat, sự kiện màn hình).
+
+### Sự kiện màn hình lấy vị trí ở đâu
+
+Mỗi lần bật/tắt màn hình, app ghi một bản ghi kèm vị trí — nhưng **không bật
+GPS**. Nó lấy cái mới nhất trong ba thứ đã có sẵn: cache vị trí của hệ thống,
+fix gần nhất nhận được, và fix gần nhất đã ghi. Chi phí bằng không.
+
+Đổi lại, vị trí đó **có thể cũ**. Bản ghi luôn kèm tuổi của vị trí, và trang
+web hiện nó ngay cạnh toạ độ — `10.762622, 106.660172 · đo 4 phút trước`.
+
+Những bản ghi này **không nằm trên đường đi** và **không cộng vào quãng
+đường**. Xem chúng ở tab Nhật ký của trang web.
 
 ---
 
@@ -188,7 +200,7 @@ và không bao giờ tự ngủ. **Nhớ đổi lại khi xong việc.**
 | **Buffer** (nâng cao) | Xếp hàng khi mất mạng rồi gửi bù. Nên để bật |
 | **Wake lock** (nâng cao) | Giữ CPU thức. Chỉ bật khi nghi máy ngủ làm mất dữ liệu |
 | **Log chi tiết mỗi (giây)** | Giãn cách giữa hai dòng log chi tiết cùng loại. 0 là ghi hết |
-| **Sự kiện bật/tắt màn hình** | Gửi một bản ghi mỗi lần màn hình sáng/tắt. Không kèm toạ độ |
+| **Sự kiện bật/tắt màn hình** | Gửi một bản ghi mỗi lần màn hình sáng/tắt, kèm vị trí gần đúng. Không bật GPS |
 | **Ưu tiên nhà cung cấp nền tảng** | Dùng định vị hệ thống thay Google Play services |
 
 ---

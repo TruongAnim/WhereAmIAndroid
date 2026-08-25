@@ -101,7 +101,7 @@
     <string name="detail_log_hint">Minimum gap between repeated detail entries of the same kind. 0 records every one.</string>
     <string name="ignore_jitter_label">Ignore GPS jitter</string>
     <string name="screen_events_label">Screen on/off events</string>
-    <string name="screen_events_hint">Send a record every time the screen wakes or sleeps.</string>
+    <string name="screen_events_hint">Send a record every time the screen wakes or sleeps, with an approximate position. Does not turn on GPS.</string>
     <string name="ignore_jitter_hint">Do not count a step the fix is too vague to prove. Keeps a phone lying still from drawing a journey.</string>
     <string name="distance_below_accuracy_warning">Below the ~%1$d m error of this accuracy level. Drift alone will clear it and record movement that never happened.</string>
     <string name="interval_ignored_warning">Has no effect while distance is above 0. Android cannot be asked for both at once. Set distance to 0, or use Highest accuracy.</string>
