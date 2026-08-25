@@ -85,7 +85,8 @@ private fun classify(message: String): LogKind {
 
         "accepted" in text || "restored" in text -> LogKind.SUCCESS
         "stationary" in text || "geofence" in text || "stop detection" in text ||
-            "activity" in text || "heartbeat" in text -> LogKind.MOTION
+            "activity" in text || "heartbeat" in text ||
+            "screen" in text -> LogKind.MOTION
 
         else -> LogKind.INFO
     }

@@ -33,6 +33,7 @@ fun TrackingSettings.toConfig(notificationText: String): Config = Config(
     buffer = buffer,
     preferPlatformProviders = preferPlatformProviders,
     detailLogIntervalSeconds = detailLogSeconds,
+    screenEvents = screenEvents,
     notification = NotificationConfig(text = notificationText),
 )
 

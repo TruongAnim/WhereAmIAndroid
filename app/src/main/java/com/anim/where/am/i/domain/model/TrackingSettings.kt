@@ -14,4 +14,6 @@ data class TrackingSettings(
     val preferPlatformProviders: Boolean = false,
     /** Seconds between repeated detail log entries of the same kind. 0 logs every one. */
     val detailLogSeconds: Int = 5,
+    /** Report a record each time the screen turns on or off. */
+    val screenEvents: Boolean = true,
 )

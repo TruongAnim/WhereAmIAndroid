@@ -99,5 +99,7 @@
     <string name="log_mode_main_hint">%1$d detail entries hidden</string>
     <string name="detail_log_label">Detail log every (s)</string>
     <string name="detail_log_hint">Minimum gap between repeated detail entries of the same kind. 0 records every one.</string>
+    <string name="screen_events_label">Screen on/off events</string>
+    <string name="screen_events_hint">Send a record every time the screen wakes or sleeps.</string>
     <string name="jump_to_newest">Jump to newest</string>
 </resources>

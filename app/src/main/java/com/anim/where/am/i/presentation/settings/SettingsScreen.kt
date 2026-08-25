@@ -259,6 +259,12 @@ fun SettingsScreen(
                         ) { v -> viewModel.update { it.copy(detailLogSeconds = v) } }
                         RowDivider()
                         SwitchRow(
+                            title = stringResource(R.string.screen_events_label),
+                            subtitle = stringResource(R.string.screen_events_hint),
+                            checked = s.screenEvents,
+                        ) { v -> viewModel.update { it.copy(screenEvents = v) } }
+                        RowDivider()
+                        SwitchRow(
                             title = stringResource(R.string.prefer_platform_label),
                             subtitle = stringResource(R.string.prefer_platform_hint),
                             checked = s.preferPlatformProviders,

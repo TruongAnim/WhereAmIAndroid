@@ -41,6 +41,7 @@ class SettingsRepositoryImpl @Inject constructor(
             prefs[SettingsKeys.STOP_DETECTION] = settings.stopDetection
             prefs[SettingsKeys.PREFER_PLATFORM] = settings.preferPlatformProviders
             prefs[SettingsKeys.DETAIL_LOG] = settings.detailLogSeconds
+            prefs[SettingsKeys.SCREEN_EVENTS] = settings.screenEvents
         }
         Unit
     }
@@ -60,6 +61,7 @@ class SettingsRepositoryImpl @Inject constructor(
             stopDetection = this[SettingsKeys.STOP_DETECTION] ?: true,
             preferPlatformProviders = this[SettingsKeys.PREFER_PLATFORM] ?: false,
             detailLogSeconds = this[SettingsKeys.DETAIL_LOG] ?: 5,
+            screenEvents = this[SettingsKeys.SCREEN_EVENTS] ?: true,
         )
     }
 }
